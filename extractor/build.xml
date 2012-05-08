@@ -1,0 +1,50 @@
+<project name="SWFExtractor" default="dist" basedir=".">
+	<description>
+		Build Malvertising Job Dispatcher
+    </description>
+
+	<property name="build" location="C:\temp\ant\${ant.project.name}\build" />
+	<property name="dist" location="C:\temp\ant\${ant.project.name}\dist" />
+
+	<path id="compile-classpath">
+		<fileset dir="${build}">
+			<include name="**/*.class" />
+		</fileset>
+		<fileset dir="${basedir}/libs">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile" description="compile the source ">
+		<mkdir dir="${build}" />
+
+		<javac srcdir="${basedir}/src" destdir="${build}" target="1.6">
+			<classpath refid="compile-classpath" />
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<mkdir dir="${dist}/libs" />
+		<copy todir="${dist}/libs">
+			<fileset dir="${basedir}/libs">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="${basedir}">
+				<include name="**/order.xml" />
+				<include name="**/*.sh" />
+			</fileset>
+		</copy>
+		<jar basedir="${build}" destfile="${dist}/libs/${ant.project.name}.jar" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="rebuild" depends="clean, dist" description="clean up and rebuild it">
+
+	</target>
+</project>
